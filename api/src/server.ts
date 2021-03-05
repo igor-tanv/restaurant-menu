@@ -8,9 +8,10 @@ const port = process.env.NODE_PORT || 4848;
 export function run() {
   const app = express();
 
-  app.use(cors({ origin: 'http://localhost:3000' }));
+  app.use(cors());
 
   app.get("/api/menu", function (_, res) {
+    console.log('hi')
     res.type('text/plain').send("Food can be served");
   });
 
