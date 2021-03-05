@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 require("es6-promises");
 
-export function apiFetch(path: string, method: any, data: any) {
+export function apiFetch(path: string, method?: string, data?: any) {
   const options: any = {};
   const headers = {
     "Content-Type": "application/json",
