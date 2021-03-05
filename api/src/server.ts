@@ -12,7 +12,6 @@ export async function run() {
 
   app.get("/api/menu", async function (_, res) {
     const menu = await MenuData.getMenu()
-    console.log(menu, 17)
     res.status(200).json({ menu })
   });
 

@@ -17,7 +17,6 @@ export function apiFetch(path: string, method?: string, data?: any) {
   return fetch(url, {
     method: method.toUpperCase(),
     headers,
-
     ...options,
   }).then((response) => response.json());
 }
