@@ -11,10 +11,12 @@
   "author": "Jonathan Gill<jonathan@adludio.com>",
   "license": "ISC",
   "dependencies": {
+    "@types/knex": "^0.16.1",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "knex": "^0.95.1",
     "mocha": "^8.1.1",
     "mysql": "^2.18.1"
   },

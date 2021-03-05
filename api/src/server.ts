@@ -1,18 +1,19 @@
 import express from "express";
 import cors from "cors"
 
-require("./db/mysql")
+import { MenuData } from "./db/data/MenuData"
 
 const port = process.env.NODE_PORT || 4848;
 
-export function run() {
+export async function run() {
   const app = express();
 
   app.use(cors());
 
-  app.get("/api/menu", function (_, res) {
-    console.log('hi')
-    res.type('text/plain').send("Food can be served");
+  app.get("/api/menu", async function (_, res) {
+    const menu = await MenuData.getMenu()
+    console.log(menu, 17)
+    res.status(200).json({ menu })
   });
 
   return app.listen(port, function () {
