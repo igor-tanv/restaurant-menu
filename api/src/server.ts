@@ -1,11 +1,13 @@
 import express from "express";
 
+require("./db/mysql")
+
 const port = process.env.NODE_PORT || 4848;
 
-export function run () {
+export function run() {
   const app = express();
 
-  app.get("/", function(_, res) {
+  app.get("/", function (_, res) {
     res.type('text/plain').send("Food can be served");
   });
 
@@ -15,6 +17,6 @@ export function run () {
   })
 }
 
-if(process.env.NODE_ENV !== 'testing') {
+if (process.env.NODE_ENV !== 'testing') {
   run();
 }
