@@ -1,18 +1,16 @@
-import React from 'react';
-import logo from './logo.png';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-function App() {
+import Menu from "./features/menu";
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcome! And good luck! :)<br/>Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/">
+          <Menu />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
-
-export default App;
