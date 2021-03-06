@@ -1,4 +1,4 @@
-INSERT INTO restaurant.menu(food_type, food_name, price)
+INSERT INTO restaurant.menu(type, name, price)
 VALUES
 	('food', 'Avo on toast', 850),
 	('food', 'Pesto pasta with pine nuts and mozzarella', 950),
