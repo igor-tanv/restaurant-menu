@@ -9,11 +9,9 @@ import React, { useContext } from "react";
 
 //   return (
 //     <input
-//       type="text"
-//       inputMode="numeric"
-//       pattern="[0-9]*"
-//       onChange={({ target }) => updateItem(type, index, target.value)}
-//       name={name.replace(" ", "-").toLowerCase()}
-//     />
+//     type="text"
+//     pattern="[0-9]*"
+//     onInput={this.handleChange.bind(this)}
+//     value={this.state.financialGoal} />
 //   );
 // }

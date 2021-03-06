@@ -1,19 +1,18 @@
 import React from "react";
 
-type FoodProps = {
-  props: [];
-};
+import { MenuProps } from "../index";
 
-export default function Food({ props }: FoodProps) {
+export default function Food({ props }: MenuProps) {
   return (
     <div>
-      {props.map((meal: any, i: number) => (
-        <article className="menu-item" key={i}>
-          <h3 className="mains-name">{meal.name}</h3>
-          <strong className="mains-price">${meal.price}</strong>
-          <p className="mains-description">{meal.description}</p>
-        </article>
-      ))}
+      {props.map((food: any, index: number) => {
+        return (
+          <article className="menu-item" key={index}>
+            <h3 className="item-name">{food.name}</h3>
+            <strong className="item-price">{food.price}</strong>
+          </article>
+        );
+      })}
     </div>
   );
 }
