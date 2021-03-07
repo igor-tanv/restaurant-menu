@@ -23,7 +23,7 @@ export default function Menu() {
   return (
     <div>
       {menu.length > 0 ? (
-        <div>
+        <div className="menu">
           <Food props={filterMenu(menu, "food")} />
           <aside className="aside">
             <Drink props={filterMenu(menu, "drink")} />
