@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { MenuProps } from "../index";
 import MenuItem from "./menu-item";
 
-export default function Item({ onChange, props }: MenuProps) {
+export default function Menu({ onChange, props }: MenuProps) {
   return (
     <div>
       <div className="title">Food</div>

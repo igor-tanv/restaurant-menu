@@ -1,14 +1,14 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import Menu from "./features/menu";
+import Order from "./features/order";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Menu />
+          <Order />
         </Route>
       </Switch>
     </BrowserRouter>

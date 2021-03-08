@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Item from "./item";
+import Menu from "./menu";
 
 import { apiFetch } from "../../modules/api-fetch";
 
@@ -50,12 +50,12 @@ const TotalStore = {
   items: new Map<number, TotalStoreMenuItem>(),
 };
 
-export default function Menu() {
+export default function Order() {
   const [menu, setMenu] = useState([]);
   const [total, setTotal] = useState(0);
+  const [menuIds, setMenuIds] = useState<number[]>([]);
 
   TotalStore.onChange = (t: number) => {
-    console.log(`new totla: ${t}`);
     setTotal(t);
   };
 
@@ -66,37 +66,24 @@ export default function Menu() {
     type: string
   ) => {
     TotalStore.update(id, price, count, type);
+    setMenuIds([...menuIds, id]);
   };
 
-  /*
-  const submitOrder = () => {
-    //const order = await apiRequest(....)
-    // Order -> ready (boolean)
-
-    localStorage.setItem("latest_order_id", order.id);
-
-    // On the server:
-
-    // const order = await Order.create(...)
-    // timeout: order.set("ready", true).save()
-
-    const checkState = () => {
-      const latestOrderId = localStorage.getItem("latest_order_id");
-      if (!latestOrderId) {
-        return;
-      }
-      // GET /order/${latestOrderId}
-      if (order.ready) {
-        // Show the popup
-        localStorage.setItem("latest_order_id", "");
-        setPopupMessage("Your order is ready.");
-      } else {
-        setTimeout(checkState, 5000);
-      }
-    };
-
-    checkState();
-  };*/
+  // order will have: id:number, total:number, itemIds:array of numbers, ready:boolean
+  //client will pass total and itemIds to server
+  function handleSubmit(e: any) {
+    console.log("total: ", total, "menuIds: ", menuIds);
+    e.preventDefault();
+    apiFetch("order", "post", { total, menuIds })
+      .then((json) => {
+        if (json.errors) {
+          console.log("error");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     apiFetch("menu").then((json) => setMenu(json.menu));
@@ -106,12 +93,21 @@ export default function Menu() {
     return menu.filter((item: any) => item.type === type);
   }
 
+  function orderPlaced(total: number) {
+    return total !== 0 ? true : false;
+  }
+
   return (
     <div>
       {menu.length > 0 ? (
         <>
           <div className="menu">
-            <Item onChange={itemChanged} props={filterMenu(menu, "food")} />
+            <form onSubmit={handleSubmit} autoComplete="off">
+              <Menu onChange={itemChanged} props={filterMenu(menu, "food")} />
+              <button type="submit" disabled={!orderPlaced(total)}>
+                Place Order
+              </button>
+            </form>
           </div>
           <div>
             <h2>
