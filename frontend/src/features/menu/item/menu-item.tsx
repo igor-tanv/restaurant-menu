@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Food from ".";
 
 interface MenuItemProps {
   item: {
@@ -13,12 +12,11 @@ interface MenuItemProps {
 
 const FoodItemLocalStore = {
   setCount(id: Number, count: Number) {
-    localStorage.setItem(`menu_item_count_${id}`, String(count));
+    localStorage.setItem(`menu_item_id_${id}`, String(count));
   },
   getCount(id: Number) {
-    return parseInt(localStorage.getItem(`menu_item_count_${id}`) || "0");
+    return parseInt(localStorage.getItem(`menu_item_id_${id}`) || "0");
   },
-  initialized: false,
 };
 
 export default function MenuItem({ onChange, item, type }: MenuItemProps) {
@@ -28,15 +26,11 @@ export default function MenuItem({ onChange, item, type }: MenuItemProps) {
 
   const menuItemCountChange = (e: any) => {
     data.count = parseInt(e.target.value);
-    setData({ ...data });
     FoodItemLocalStore.setCount(item.id, data.count);
-    onChange(item.id, item.price, data.count);
+    setData({ ...data });
   };
 
-  if (!FoodItemLocalStore.initialized) {
-    onChange(item.id, item.price, data.count);
-    FoodItemLocalStore.initialized = true;
-  }
+  onChange(item.id, item.price, data.count, type);
 
   return (
     <div>
@@ -46,6 +40,7 @@ export default function MenuItem({ onChange, item, type }: MenuItemProps) {
         <input
           type="number"
           className="menu-item-count"
+          min="0"
           value={data.count}
           onChange={menuItemCountChange}
         />
