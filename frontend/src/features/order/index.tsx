@@ -5,7 +5,7 @@ import Menu from "./menu";
 import { apiFetch } from "../../modules/api-fetch";
 
 export interface MenuProps {
-  props: [];
+  props: Array<{}>;
   onChange: Function;
 }
 
@@ -26,10 +26,7 @@ const TotalStore = {
       newTotal += value.price * value.count;
       types.set(value.type, true);
     });
-
-    if (types.get("drink") && types.get("main")) {
-      newTotal -= newTotal * 0.1;
-    }
+    console.log(types, 29);
 
     if (TotalStore.total !== newTotal) {
       clearTimeout(TotalStore.reset_timer);
@@ -58,8 +55,16 @@ const TotalStore = {
 };
 
 export default function Order() {
-  const [menu, setMenu] = useState([]);
+  const [menu, setMenu] = useState<Array<{}>>([]);
+
   const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    apiFetch("menu").then((json) => {
+      console.log(json);
+      setMenu(json.menu);
+    });
+  }, []);
 
   TotalStore.onChange = (t: number) => {
     setTotal(t);
@@ -119,14 +124,6 @@ export default function Order() {
       });
   }
 
-  useEffect(() => {
-    apiFetch("menu").then((json) => setMenu(json.menu));
-  }, []);
-
-  function filterMenu(menu: any, type: string) {
-    return menu.filter((item: any) => item.type === type);
-  }
-
   function orderPlaced(total: number) {
     return total !== 0 ? true : false;
   }
@@ -137,7 +134,7 @@ export default function Order() {
         <>
           <div className="menu">
             <form id="menu-form" onSubmit={handleSubmit} autoComplete="off">
-              <Menu onChange={itemChanged} props={filterMenu(menu, "food")} />
+              <Menu onChange={itemChanged} props={menu} />
               <button type="submit" disabled={!orderPlaced(total)}>
                 Place Order
               </button>
@@ -145,7 +142,7 @@ export default function Order() {
           </div>
           <div>
             <h2>
-              Total: $<span>{total}</span>
+              Total: $<span>{total.toFixed(2)}</span>
             </h2>
           </div>
         </>

@@ -43,7 +43,7 @@ export default function MenuItem({ onChange, item, type }: MenuItemProps) {
           value={data.count}
           onChange={menuItemCountChange}
         />
-        <strong className="item-price">${item.price}</strong>
+        <strong className="item-price">${item.price.toFixed(2)}</strong>
       </article>
     </div>
   );
