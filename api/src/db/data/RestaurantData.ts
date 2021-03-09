@@ -1,6 +1,11 @@
 import { DbProvider } from '../providers/DbProvider'
 import { IdentityHelpers } from '../../helpers/IdentityHelpers'
 
+export enum OrderStatus {
+  Preparing = 1,
+  Ready = 2,
+  Cancelled = 3,
+}
 export class RestaurantData {
 
   static async getMenu() {
@@ -9,13 +14,16 @@ export class RestaurantData {
   }
 
   static async placeOrder(total: number) {
+    // not working
+    console.log(IdentityHelpers.generateUUID(), 13)
     const db = await DbProvider.getConnection()
     const row: any = {
       id: IdentityHelpers.generateUUID(),
-      total,
-      ready: false
+      status: OrderStatus.Preparing
     }
-    return await db.insert(row).into("orders")
+    const order = await db.insert(row).into("orders")
+    console.log(order)
+    return order
   }
 
 }

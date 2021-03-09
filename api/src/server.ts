@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from "body-parser";
 import cors from "cors"
 
 import { RestaurantData } from "./db/data/RestaurantData"
@@ -9,6 +10,9 @@ export async function run() {
   const app = express();
 
   app.use(cors());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(express.json())
 
   app.get("/api/menu", async (req, res) => {
     const menu = await RestaurantData.getMenu()
@@ -16,8 +20,7 @@ export async function run() {
   });
 
   app.post("/api/order", async (req, res) => {
-    console.log(req.body, 19)
-    const menu = await RestaurantData.placeOrder(req.body.total)
+    const menu = await RestaurantData.placeOrder(req.body.menuIds)
     res.status(200).json({ menu })
   });
 

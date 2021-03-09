@@ -10,6 +10,7 @@ export interface MenuProps {
 }
 
 interface TotalStoreMenuItem {
+  id: number;
   price: number;
   count: number;
   type: string;
@@ -40,6 +41,7 @@ const TotalStore = {
   },
   update(id: number, price: number, count: number, type: string) {
     TotalStore.items.set(id, {
+      id,
       price,
       count,
       type,
@@ -53,7 +55,6 @@ const TotalStore = {
 export default function Order() {
   const [menu, setMenu] = useState([]);
   const [total, setTotal] = useState(0);
-  const [menuIds, setMenuIds] = useState<number[]>([]);
 
   TotalStore.onChange = (t: number) => {
     setTotal(t);
@@ -66,15 +67,29 @@ export default function Order() {
     type: string
   ) => {
     TotalStore.update(id, price, count, type);
-    setMenuIds([...menuIds, id]);
   };
 
-  // order will have: id:number, total:number, itemIds:array of numbers, ready:boolean
-  //client will pass total and itemIds to server
+  function getSelectedItems(TotalStore: any) {
+    let selectedItems: Array<{
+      id: number;
+      count: number;
+    }> = [];
+    TotalStore.items.forEach((item: any) => {
+      if (item.count !== 0) {
+        selectedItems.push({
+          id: item.id,
+          count: item.count,
+        });
+      }
+    });
+    return selectedItems;
+  }
+
   function handleSubmit(e: any) {
-    console.log("total: ", total, "menuIds: ", menuIds);
     e.preventDefault();
-    apiFetch("order", "post", { total, menuIds })
+    const selectedItems = getSelectedItems(TotalStore);
+    console.log(selectedItems, 91);
+    apiFetch("order", "post", { selectedItems })
       .then((json) => {
         if (json.errors) {
           console.log("error");
