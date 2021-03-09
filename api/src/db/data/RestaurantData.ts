@@ -1,7 +1,11 @@
 import { DbProvider } from '../providers/DbProvider'
 import { IdentityHelpers } from '../../helpers/IdentityHelpers'
 
-export enum OrderStatus {
+const MENU = 'menu'
+const ORDER = 'menu_order'
+const ORDER_ITEM = 'menu_order_item'
+
+enum OrderStatus {
   Preparing = 1,
   Ready = 2,
   Cancelled = 3,
@@ -10,20 +14,29 @@ export class RestaurantData {
 
   static async getMenu() {
     const db = await DbProvider.getConnection()
-    return (await db.select().from('menu'))
+    return (await db.select().from(MENU))
   }
 
-  static async placeOrder(total: number) {
-    // not working
-    console.log(IdentityHelpers.generateUUID(), 13)
+  static async getOrder(orderId: string) {
     const db = await DbProvider.getConnection()
-    const row: any = {
+    return await db(ORDER).where({ order_id: orderId }).select()
+  }
+
+  static async placeOrder(data: []) {
+    const db = await DbProvider.getConnection()
+    const order: any = {
       id: IdentityHelpers.generateUUID(),
       status: OrderStatus.Preparing
     }
-    const order = await db.insert(row).into("orders")
-    console.log(order)
+    const rows = data.map((row: any) => ({
+      order_id: order.id,
+      item_id: row.id,
+      item_count: row.count
+    }))
+
+    await db.insert(order).into(ORDER)
+    await db.batchInsert(ORDER_ITEM, rows)
+
     return order
   }
-
 }

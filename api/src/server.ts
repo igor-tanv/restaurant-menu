@@ -6,6 +6,7 @@ import { RestaurantData } from "./db/data/RestaurantData"
 
 const port = process.env.NODE_PORT || 4848;
 
+
 export async function run() {
   const app = express();
 
@@ -20,7 +21,8 @@ export async function run() {
   });
 
   app.post("/api/order", async (req, res) => {
-    const menu = await RestaurantData.placeOrder(req.body.menuIds)
+    const { selectedItems } = req.body
+    const menu = await RestaurantData.placeOrder(selectedItems)
     res.status(200).json({ menu })
   });
 

@@ -88,15 +88,15 @@ export default function Order() {
   function handleSubmit(e: any) {
     e.preventDefault();
     const selectedItems = getSelectedItems(TotalStore);
-    console.log(selectedItems, 91);
     apiFetch("order", "post", { selectedItems })
       .then((json) => {
+        console.log("post response", json);
         if (json.errors) {
-          console.log("error");
+          console.log("data error");
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("server error: ", error);
       });
   }
 
