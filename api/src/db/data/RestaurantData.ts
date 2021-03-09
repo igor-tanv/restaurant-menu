@@ -19,7 +19,18 @@ export class RestaurantData {
 
   static async getOrder(orderId: string) {
     const db = await DbProvider.getConnection()
-    return await db(ORDER).where({ order_id: orderId }).select()
+    return await db(ORDER).where({ id: orderId })
+  }
+
+  static async getOrderItems(orderId: string) {
+    const db = await DbProvider.getConnection()
+    return await db(ORDER_ITEM).where({ order_id: orderId })
+  }
+
+  static async updateOrder(orderId: string) {
+    const db = await DbProvider.getConnection()
+    await db(ORDER).where({ id: orderId }).update({ status: OrderStatus.Ready })
+    return this.getOrder(orderId)
   }
 
   static async placeOrder(data: []) {

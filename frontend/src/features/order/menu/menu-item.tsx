@@ -36,7 +36,6 @@ export default function MenuItem({ onChange, item, type }: MenuItemProps) {
     <div>
       <article className="menu-item" data-item-type={type}>
         <h3 className="item-name">{item.name}</h3>
-
         <input
           type="number"
           className="menu-item-count"

@@ -48,6 +48,11 @@ const TotalStore = {
     });
     TotalStore.compute();
   },
+  reset() {
+    TotalStore.items.clear();
+    localStorage.clear();
+    TotalStore.total = 0;
+  },
   onChange(t: number) {},
   items: new Map<number, TotalStoreMenuItem>(),
 };
@@ -85,18 +90,32 @@ export default function Order() {
     return selectedItems;
   }
 
-  function handleSubmit(e: any) {
+  async function handleSubmit(e: any) {
     e.preventDefault();
     const selectedItems = getSelectedItems(TotalStore);
     apiFetch("order", "post", { selectedItems })
       .then((json) => {
-        console.log("post response", json);
-        if (json.errors) {
-          console.log("data error");
+        alert("Order has been submitted");
+        setTotal(0);
+        TotalStore.reset();
+        localStorage.setItem("last_order_id", json.order.id);
+
+        function checkOrderStatus() {
+          apiFetch(
+            `order/${json.order.id || localStorage.getItem("last_order_id")}`
+          ).then((placedOrder) => {
+            const { order } = placedOrder;
+            if (order[0].status === 2) {
+              alert("Your order is ready!");
+            } else {
+              setTimeout(checkOrderStatus, 5000);
+            }
+          });
         }
+        checkOrderStatus();
       })
       .catch((error) => {
-        console.log("server error: ", error);
+        alert("Server error");
       });
   }
 
@@ -117,7 +136,7 @@ export default function Order() {
       {menu.length > 0 ? (
         <>
           <div className="menu">
-            <form onSubmit={handleSubmit} autoComplete="off">
+            <form id="menu-form" onSubmit={handleSubmit} autoComplete="off">
               <Menu onChange={itemChanged} props={filterMenu(menu, "food")} />
               <button type="submit" disabled={!orderPlaced(total)}>
                 Place Order

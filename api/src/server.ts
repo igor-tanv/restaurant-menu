@@ -20,13 +20,24 @@ export async function run() {
     res.status(200).json({ menu })
   });
 
-  app.post("/api/order", async (req, res) => {
-    const { selectedItems } = req.body
-    const menu = await RestaurantData.placeOrder(selectedItems)
-    res.status(200).json({ menu })
+  app.get("/api/order/:id", async (req, res) => {
+    const orderId = req.params.id
+    const order = await RestaurantData.getOrder(orderId)
+    res.status(200).json({ order })
   });
 
-  return app.listen(port, function () {
+  app.post("/api/order", async (req, res) => {
+    const { selectedItems } = req.body
+    const order = await RestaurantData.placeOrder(selectedItems)
+    // chef
+    setTimeout(async () => {
+      await RestaurantData.updateOrder(order.id)
+    }, 5000);
+
+    res.status(200).json({ order })
+  });
+
+  return app.listen(port, async () => {
     // Port is forwarded by docker to 80.
     console.log(`Listening on http://localhost:${port}`);
   })
