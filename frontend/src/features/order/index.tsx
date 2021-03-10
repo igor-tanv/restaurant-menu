@@ -26,7 +26,6 @@ const TotalStore = {
       newTotal += value.price * value.count;
       types.set(value.type, true);
     });
-    console.log(types, 29);
 
     if (TotalStore.total !== newTotal) {
       clearTimeout(TotalStore.reset_timer);
@@ -56,14 +55,10 @@ const TotalStore = {
 
 export default function Order() {
   const [menu, setMenu] = useState<Array<{}>>([]);
-
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    apiFetch("menu").then((json) => {
-      console.log(json);
-      setMenu(json.menu);
-    });
+    apiFetch("menu").then((json) => setMenu(json.menu));
   }, []);
 
   TotalStore.onChange = (t: number) => {
