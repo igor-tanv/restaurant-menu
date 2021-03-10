@@ -128,6 +128,7 @@ export default function Order() {
       {menu.length > 0 ? (
         <>
           <div className="menu">
+            <div className="menu-title">Food Menu</div>
             <form id="menu-form" onSubmit={handleSubmit} autoComplete="off">
               <Menu onChange={itemChanged} props={menu} />
               <button type="submit" disabled={!orderPlaced(total)}>
@@ -135,7 +136,7 @@ export default function Order() {
               </button>
             </form>
           </div>
-          <div>
+          <div className="order-total">
             <h2>
               Total: $<span>{total.toFixed(2)}</span>
             </h2>
