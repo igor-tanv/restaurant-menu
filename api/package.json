@@ -8,7 +8,7 @@
     "start:watch": "nodemon 'npm start'",
     "test": "NODE_ENV=testing mocha -r ts-node/register 'src/**/*.spec.ts'"
   },
-  "author": "Jonathan Gill<jonathan@adludio.com>",
+  "author": "Igor Tatarinov<igor.tanv@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@types/knex": "^0.16.1",
