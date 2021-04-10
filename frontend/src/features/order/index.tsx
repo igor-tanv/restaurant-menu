@@ -21,10 +21,14 @@ const TotalStore = {
   reset_timer: setTimeout(() => {}, 0),
   compute() {
     let newTotal = 0;
-    let types = new Map<string, boolean>();
+    let main = 0;
+    let drink = 0;
+    //let types = new Map<string, boolean>();
     TotalStore.items.forEach((value: TotalStoreMenuItem) => {
+      if (value.type === "main") main += 1;
+      if (value.type === "drink") drink += 1;
       newTotal += value.price * value.count;
-      types.set(value.type, true);
+      //types.set(value.type, true);
     });
 
     if (TotalStore.total !== newTotal) {
@@ -123,12 +127,21 @@ export default function Order() {
     return total !== 0 ? true : false;
   }
 
+  console.log(menu);
+
   return (
     <div>
       {menu.length > 0 ? (
         <>
           <div className="menu">
             <div className="menu-title">Food Menu</div>
+            <h3>HOT DEALS</h3>
+            <ul>
+              <li>Get 10% off each main and drink combo</li>
+              <li>
+                Hungry Date Offer! Get 2 mains + 2 drinks + 1 dessert for 40.00
+              </li>
+            </ul>
             <form id="menu-form" onSubmit={handleSubmit} autoComplete="off">
               <Menu onChange={itemChanged} props={menu} />
               <button type="submit" disabled={!orderPlaced(total)}>

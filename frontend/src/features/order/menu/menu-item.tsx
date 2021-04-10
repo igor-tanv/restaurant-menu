@@ -30,7 +30,6 @@ export default function MenuItem({ onChange, item, type }: MenuItemProps) {
     data.count = parseInt(e.target.value) || 0;
     FoodItemLocalStore.setCount(item.id, data.count);
     setData({ ...data });
-    //onChange(item.id, item.price, data.count, type);
   };
 
   onChange(item.id, item.price, data.count, type);
