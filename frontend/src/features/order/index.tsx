@@ -21,16 +21,9 @@ const TotalStore = {
   reset_timer: setTimeout(() => {}, 0),
   compute() {
     let newTotal = 0;
-    let main = 0;
-    let drink = 0;
-    //let types = new Map<string, boolean>();
     TotalStore.items.forEach((value: TotalStoreMenuItem) => {
-      if (value.type === "main") main += 1;
-      if (value.type === "drink") drink += 1;
       newTotal += value.price * value.count;
-      //types.set(value.type, true);
     });
-
     if (TotalStore.total !== newTotal) {
       clearTimeout(TotalStore.reset_timer);
       TotalStore.reset_timer = setTimeout(() => {
@@ -38,6 +31,15 @@ const TotalStore = {
         TotalStore.onChange(newTotal);
       }, 50);
     }
+  },
+  applyDiscount() {
+    let handler = {
+      items: [],
+      discountTrigger: {
+        main: [],
+        drink: [],
+      },
+    };
   },
   update(id: number, price: number, count: number, type: string) {
     TotalStore.items.set(id, {
@@ -126,8 +128,6 @@ export default function Order() {
   function orderPlaced(total: number) {
     return total !== 0 ? true : false;
   }
-
-  console.log(menu);
 
   return (
     <div>
