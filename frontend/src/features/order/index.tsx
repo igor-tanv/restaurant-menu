@@ -21,8 +21,10 @@ const TotalStore = {
   reset_timer: setTimeout(() => {}, 0),
   compute() {
     let newTotal = 0;
+    let types = new Map<string, boolean>();
     TotalStore.items.forEach((value: TotalStoreMenuItem) => {
       newTotal += value.price * value.count;
+      types.set(value.type, true);
     });
     if (TotalStore.total !== newTotal) {
       clearTimeout(TotalStore.reset_timer);
@@ -102,9 +104,9 @@ export default function Order() {
     apiFetch("order", "post", { selectedItems })
       .then((json) => {
         alert("Order has been submitted");
-        setTotal(0);
         TotalStore.reset();
         localStorage.setItem("last_order_id", json.order.id);
+        setTotal(0);
 
         function checkOrderStatus() {
           apiFetch(
