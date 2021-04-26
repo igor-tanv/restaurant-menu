@@ -34,15 +34,6 @@ const TotalStore = {
       }, 50);
     }
   },
-  applyDiscount() {
-    let handler = {
-      items: [],
-      discountTrigger: {
-        main: [],
-        drink: [],
-      },
-    };
-  },
   update(id: number, price: number, count: number, type: string) {
     TotalStore.items.set(id, {
       id,
