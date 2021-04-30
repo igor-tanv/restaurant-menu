@@ -18,38 +18,11 @@ export default function Order() {
     apiFetch("menu").then((json) => setMenu(json.menu));
   }, []);
 
-  TotalStore.onChange = (t: number) => {
-    setTotal(t);
-  };
-
-  const itemChanged = (
-    id: number,
-    price: number,
-    count: number,
-    type: string
-  ) => {
-    TotalStore.update(id, price, count, type);
-  };
-
-  function getSelectedItems(TotalStore: any) {
-    let selectedItems: Array<{
-      id: number;
-      count: number;
-    }> = [];
-    TotalStore.items.forEach((item: any) => {
-      if (item.count !== 0) {
-        selectedItems.push({
-          id: item.id,
-          count: item.count,
-        });
-      }
-    });
-    return selectedItems;
-  }
+  TotalStore.onChange = (t: number) => setTotal(t);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    const selectedItems = getSelectedItems(TotalStore);
+    const selectedItems = TotalStore.getSelectedItems();
     apiFetch("order", "post", { selectedItems })
       .then((json) => {
         alert("Order has been submitted");
@@ -94,7 +67,7 @@ export default function Order() {
               </li>
             </ul>
             <form id="menu-form" onSubmit={handleSubmit} autoComplete="off">
-              <Menu onChange={itemChanged} props={menu} />
+              <Menu onChange={TotalStore.itemChanged} props={menu} />
               <button type="submit" disabled={!orderPlaced(total)}>
                 Place Order
               </button>

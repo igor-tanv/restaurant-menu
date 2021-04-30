@@ -10,13 +10,10 @@ export interface TotalStoreMenuItem {
 export const TotalStore = {
   total: 0,
   reset_timer: setTimeout(() => { }, 0),
+
   compute() {
     let newTotal = 0;
-    let types = new Map<string, boolean>();
-    TotalStore.items.forEach((value: TotalStoreMenuItem) => {
-      newTotal += value.price * value.count;
-      types.set(value.type, true);
-    });
+    TotalStore.items.forEach((value: TotalStoreMenuItem) => newTotal += value.price * value.count);
     if (TotalStore.total !== newTotal) {
       clearTimeout(TotalStore.reset_timer);
       TotalStore.reset_timer = setTimeout(() => {
@@ -25,6 +22,7 @@ export const TotalStore = {
       }, 50);
     }
   },
+
   update(id: number, price: number, count: number, type: string) {
     TotalStore.items.set(id, {
       id,
@@ -34,11 +32,38 @@ export const TotalStore = {
     });
     TotalStore.compute();
   },
+
+  itemChanged(
+    id: number,
+    price: number,
+    count: number,
+    type: string
+  ) {
+    TotalStore.update(id, price, count, type);
+  },
+
   reset() {
     TotalStore.items.clear();
     localStorage.clear();
     TotalStore.total = 0;
   },
   onChange(t: number) { },
+
   items: new Map<number, TotalStoreMenuItem>(),
+
+  getSelectedItems() {
+    let selectedItems: Array<{
+      id: number;
+      count: number;
+    }> = [];
+    TotalStore.items.forEach((item: any) => {
+      if (item.count !== 0) {
+        selectedItems.push({
+          id: item.id,
+          count: item.count,
+        });
+      }
+    });
+    return selectedItems;
+  }
 };
