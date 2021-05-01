@@ -67,7 +67,7 @@ export default function Order() {
               </li>
             </ul>
             <form id="menu-form" onSubmit={handleSubmit} autoComplete="off">
-              <Menu onChange={TotalStore.itemChanged} props={menu} />
+              <Menu onChange={TotalStore.update} props={menu} />
               <button type="submit" disabled={!orderPlaced(total)}>
                 Place Order
               </button>
