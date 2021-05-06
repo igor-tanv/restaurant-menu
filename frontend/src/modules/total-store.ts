@@ -12,12 +12,13 @@ export const TotalStore = {
   reset_timer: setTimeout(() => { }, 0),
 
   compute() {
-    let orderedItems: any = TotalStore.checkDiscount()
-    console.log(orderedItems)
+    let { order, discountValue } = TotalStore.checkDiscount()
 
-    let newTotal = (orderedItems.length !== 0) ? orderedItems.reduce((total: any, item: any) => {
+    let newTotal = (order.length !== 0) ? order.reduce((total: any, item: any) => {
       return total += item.price * item.count
     }, 0) : 0
+
+    newTotal -= discountValue
 
     if (TotalStore.total !== newTotal) {
       clearTimeout(TotalStore.reset_timer);
@@ -32,26 +33,33 @@ export const TotalStore = {
   onChange(t: number) { },
 
   checkDiscount() {
-    let discountTrigger: any = {
-      main: null,
-      drink: null
-    };
-    let order: any = TotalStore.getSelectedItems()
-    let discountedOrder: any = []
-
-    order.forEach((item: any) => {
-      if (item.type === 'main' || item.type === 'drink') discountTrigger[item.type] = item
-    })
-
-    if (discountTrigger.main !== null && discountTrigger.drink !== null) {
-      discountedOrder = order.map((item: any) => {
-        if (discountTrigger.main.id === item.id) item.price *= .9
-        if (discountTrigger.drink.id === item.id) item.price *= .9
-        return item
+    let order: any[] = TotalStore.getSelectedItems()
+    let discountValue: any = 0
+    let main = order.filter((item: any) => (item.type === 'main'))
+    let drink = order.filter((item: any) => (item.type === 'drink'))
+    if (main.length != 0 && drink.length != 0) {
+      let combos = Math.min(main.length, drink.length)
+      let comboArray: any[] = []
+      let i
+      for (i = 0; i < combos; i++) {
+        comboArray.push({
+          main: main[i],
+          drink: drink[i]
+        })
+      }
+      comboArray.forEach((combo: any) => {
+        let numOfCombos = Math.min(combo.main.count, combo.drink.count)
+        discountValue += ((combo.main.price + combo.drink.price) * .1) * numOfCombos
       })
     }
 
-    return (discountedOrder.length !== 0) ? discountedOrder : order;
+
+
+
+
+
+
+    return { order, discountValue };
   },
 
   update(id: number, price: number, count: number, type: string) {
